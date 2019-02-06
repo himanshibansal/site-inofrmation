@@ -1,0 +1,5 @@
+name: Site Information 
+type: module  
+description: site inofrmation module
+core: 8.x  
+package: Custom 

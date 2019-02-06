@@ -1,0 +1,31 @@
+<?php
+
+use \Drupal\Core\Form\FormStateInterface;
+
+/**
+* Implements hook_form_FORM_ID_alter().
+*/
+function site_information_form_system_site_information_settings_alter(&$form, FormStateInterface $form_state, $form_id) {
+
+  $config = \Drupal::service('config.factory')->getEditable('site_information.settings');
+  // $apikey = $config->get('siteapikey','noAPIkeyyet'); 
+  
+  $form['siteapikey'] = array(
+    '#type' => 'textfield',
+    '#title' => t("Site Api Key"),
+	'#default_value'=> $config->get('siteapikey','noAPIkeyyet'), 
+  );
+  // if(!$form_state->get('siteapikey')->isEmpty()){
+  // 	$form['submit'] = array([
+  // 		'type' => 'submit',
+  // 		'#value' => t('Update configuration')
+  // 	]);
+  // }
+	$form['#validate'][] = 'site_information_form_validate';
+	$form['#submit'][] = 'site_information_form_submit';
+}
+function site_information_form_submit(&$form, FormStateInterface $form_state) {
+	    $config = \Drupal::service('config.factory')->getEditable('site_information.settings');
+  		$config->set('siteapikey', $form_state->getValue('siteapikey'))->save();
+  		// drupal_set_message('sucessfully saved'.$config->getvalue('siteapikey'));
+}
